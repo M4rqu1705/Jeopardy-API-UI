@@ -1,0 +1,26 @@
+Deliverables:
+    1) Search function
+        - intuitive
+        - responsive
+        - mobile friendly
+        - easy to navigate
+    2) Filter results by
+        - Date or timeframe aired (day, week, month)
+            + airdate ()
+        - Trivia category
+            + category.title (fuzzy search text box)
+        - Level of difficulty
+            + value (100-600)
+        - Personalized criteria
+    3) Bonus features
+        - Game board simulation with categories and questions sorted from
+          easiest to hardest
+        - Marking or saving questions to 'favorites' collection
+
+Criteria!!:
+    33.33% - Deliverables
+    33.33% - Creativity/Aesthetics (UI/UX)
+    33.33% - Clarity & Code Quality
+
+http://jservice.io/
+https://www.mindsumo.com/contests/jeopardy-api
