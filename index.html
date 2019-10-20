@@ -1,107 +1,40 @@
 <!DOCTYPE html>
-    <html lang="en">
+<html lang="en">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <meta charset="UTF-8"/>
+
+        <title>Jeopardy!</title>
+
+        <base href="."/>
+
+        <link rel="stylesheet" type="text/css" href="css/main.css"/>
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="#" /> -->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <meta name="copyright" content="" />
+        <meta name="author" content="Author name" />
+        <meta http-equiv="cache-control" content="no-cache"/>
+        <meta property="og:site_name" content=""/>
+        <meta property="og:type" content=""/>
+        <meta property="og:title" content=""/>
+        <meta property="og:description" content=""/>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     </head>
+
     <body>
-    <div id='content'></div>
+        <div class="autocomplete">
+            <input id="categoryInput" type="text" name="category" placeholder="Baseball">
+        </div>
+        <object type="image/svg+xml" data="images/loader.svg" id="loadingIcon">Loading ... </object>
+        <div id="searchResults"></div>
 
-    <script  type="text/javascript">
+        <script src="js/main.js"></script>
+        <script type="text/javascript"> updateContent();</script>
 
-    // Prepare variables used to construct url
-    var Clue,
-    Answer,
-    Value=100,
-    //AirDate = [ new Date("January 1, 1985"), new Date("August 1, 1985") ]
-    AirDate = [0,0],
-    Category = "Something";
-
-var Search = "";
-
-// Make input sanitazion easier to prevent mishaps
-function sanitize(str) {
-    str = String(str);
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#x27;',
-        "/": '&#x2F;',
-    };
-    const reg = /[&<>"'/]/ig;
-    var output = str.replace(reg, (match)=>(map[match]));
-    return(output);
-}
-
-function getURL(){
-    url=['http://jservice.io/api/clues/?'];
-
-    /*    
-if(Category){
-Category = sanitize(Category);
-url.push("Category=".concat('"', Category, '"'));
-}//*/
-
-    // If `Value` fits criteria 
-    if([100, 200, 300, 400, 500, 600].includes(Value)){
-        Value = sanitize(Value);
-        url.push("Value=".concat(Value));
-    }
-
-    // If AirDate range is defined
-    if(typeof AirDate === '' && typeof AirDate[0].getMonth === 'function' && AirDate[0] <= new Date()){
-        day = AirDate[0].toISOString();
-        day = sanitize(day);
-        url.push("min_date=".concat(day));
-    }
-    if(typeof AirDate[1].getMonth === 'function'){
-        day = AirDate[1].toISOString();
-        day = sanitize(day);
-        url.push("max_date=".concat(day));
-    }
-    url = url.join("&");
-
-    console.log(url);
-    return(url);
-}
-
-$.getJSON(getURL(), function(data) {
-    console.log(data);
-
-    for(let c = 0; c<data.length; c++){
-        let answer =    String(data[c].answer),
-            question =  String(data[c].question),
-            value =     Number(data[c].value),
-            airdate =   new Date(data[c].airdate),
-            category =  String(data[c].category.title);
-
-        // Structures to help normalize data 
-        month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        function capitalize(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
-
-        airdate = " ".concat(month[new Number(airdate.getMonth())], " " , new String(airdate.getDate()), ", ", new String(airdate.getFullYear()));
-
-        // const TEXT_WIDTH = 40
-        // if(question.length > TEXT_WIDTH){
-            // question = question.slice(0, TEXT_WIDTH-3).concat("...")
-        // }
-
-        questionP = $("<p></p>").innerHTML = question;
-        detailsP = $("<p></p>").innerHTML = [
-            capitalize(category),
-            airdate,
-            value].join(" • ");
-
-        $("body").append(questionP, $("<br/>"), detailsP, $("<br/>"), $("<br/>"))
-    }
-
-
-});
-</script> 
     </body>
-    </html>
+</html>
