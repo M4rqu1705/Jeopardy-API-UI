@@ -30,11 +30,14 @@ function defined(data){
     return(Boolean(typeof data !== 'undefined'));
 }
 
-function loadingIcon(state){
-    if(state)
-        $("#loadingIcon").css({"display":"block"});
-    else
-        $("#loadingIcon").css({"display":"none"});
+// Show loading spinner
+function loadingSpinner(state){
+    if(state){
+        $('#loadingIcon').show();
+    }else{
+        $('#loadingIcon').hide();
+    }
+
 }
 
 function getURL(){
@@ -43,13 +46,15 @@ function getURL(){
     if(defined(Value)) Value = Number(sanitize(Value));
     if(defined(AirDate)) AirDate[0] = Date(sanitize(AirDate[0])), AirDate[1] = Date(sanitize(AirDate[1]));
 
-    url=['http://jservice.io/api/clues/?'];
+    url=['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
 
     if(defined(Category)){
         // Get categories if not retrieved yet
         if(!defined(categories)){
             $.ajax({
-                url:        "categories.json",
+                // url:        "categories.json",
+                url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
+                cache:      false,
                 dataType:   "json",
                 success:    function(data){
                     categories = data;
@@ -87,7 +92,7 @@ function getURL(){
     }
 
     if(url.length == 1){
-        url = 'http://jservice.io/api/random/?count=10';
+        url = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=10';
     }else{
         url = url.join("&");
     }
@@ -96,54 +101,67 @@ function getURL(){
 }
 
 function updateContent(){
-    $.getJSON(getURL(), function(data) {
 
-        // Empty search results before adding content
-        $("#searchResults").empty();
-        for(let c = 0; c<data.length; c++){
-            let answer =    String(data[c].answer),
-                question =  String(data[c].question),
-                value =     Number(data[c].value),
-                airdate =   new Date(data[c].airdate),
-                category =  String(data[c].category.title);
+    var timer = setTimeout(function() {
+        $.ajax({
+            url:        getURL(),
+            dataType:   "json",
+            success:    function(data){
+                // Empty search results before adding content
+                $('#searchResults').empty();
+                for(let c = 0; c<data.length; c++){
+                    let answer =    String(data[c].answer),
+                        question =  String(data[c].question),
+                        value =     Number(data[c].value),
+                        airdate =   new Date(data[c].airdate),
+                        category =  String(data[c].category.title);
 
-            // Structures to help normalize data 
-            month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            function capitalize(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
+                    // Structures to help normalize data 
+                    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    function capitalize(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
 
-            airdate = " ".concat(month[new Number(airdate.getMonth())], " " , new String(airdate.getDate()), ", ", new String(airdate.getFullYear()));
+                    airdate = " ".concat(month[new Number(airdate.getMonth())], " " , new String(airdate.getDate()), ", ", new String(airdate.getFullYear()));
 
-            // const TEXT_WIDTH = 40
-            // if(question.length > TEXT_WIDTH){
-            // question = question.slice(0, TEXT_WIDTH-3).concat("...")
-            // }
-            
+                    // const TEXT_WIDTH = 40
+                    // if(question.length > TEXT_WIDTH){
+                    // question = question.slice(0, TEXT_WIDTH-3).concat("...")
+                    // }
 
-            entryD = $("<div><div>").attr({
-                "class":"entry"
-            });
-            questionP = $("<p></p>").attr({
-                "class":"question"
-            });
-            detailsP = $("<p></p>").attr({
-                "class":"details"
-            });
 
-            questionP.text(question);
-            detailsP.text([
-                capitalize(category),
-                airdate,
-                value].join(" • "));
+                    entryD = $('<div><div>').attr({
+                        "class":"entry"
+                    });
+                    questionP = $('<p></p>').attr({
+                        "class":"question"
+                    });
+                    detailsP = $('<p></p>').attr({
+                        "class":"details"
+                    });
 
-            entryD.append(questionP, detailsP)
-            
-            // #############################################################
-            // ###################### ON CLICK #############################
-            // #############################################################
+                    questionP.text(question);
+                    detailsP.text([
+                        capitalize(category),
+                        airdate,
+                        value].join(" • "));
 
-            $("#searchResults").append(entryD);
-        }
-    });
+                    entryD.append(questionP, detailsP)
+
+                    // #############################################################
+                    // ###################### ON CLICK #############################
+                    // #############################################################
+
+                    $('#searchResults').append(entryD);
+                }
+            },
+            complete:   function(){
+                loadingSpinner(false);
+            },
+            error:      function(err){
+                console.log(err);
+            }
+        });
+
+    }, 1);
 }
 function autocomplete(field, possibleValues) {
     // Categories dictionary is passed in, but instead we need the keys
@@ -158,6 +176,11 @@ function autocomplete(field, possibleValues) {
 
         // Do not waste time on empty fields
         if (!val) return(false);
+        // Do not waste time on other than characters
+        if (!/[A-Za-z0-9_'"]/.test(val)){
+            console.log("Exited auto completion");
+            return(false);
+        }
 
         currentFocus = -1;
 
@@ -184,7 +207,12 @@ function autocomplete(field, possibleValues) {
                 // End list once user selects this match
                 b.addEventListener("click", function(e) {
                     field.value = this.getElementsByTagName("input")[0].value;
+                    Category = field.value;
                     closeAllLists();
+                    loadingSpinner(true);
+                    updateContent();
+
+
                 });
                 a.appendChild(b);
             }
@@ -195,18 +223,19 @@ function autocomplete(field, possibleValues) {
     field.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
+        if (e.keyCode == 40) { // DOWN Arrow
             currentFocus++;
             addActive(x);
-        } else if (e.keyCode == 38) { //up
+        } else if (e.keyCode == 38) { //UP Arrow
             currentFocus--;
             addActive(x);
-        } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        } else if (e.keyCode == 13) { // ENTER key
             e.preventDefault();
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
+                if (x){
+                    x[currentFocus].click();
+                }
             }
 
         }
@@ -238,12 +267,7 @@ except the one passed as an argument:*/
         }
     }
     /*execute a function when someone clicks in the document:*/
-    document.addEventListener("click", async function (e) {
-        loadingIcon(true);
-        closeAllLists(e.target);
-        Category = field.value;
-        loadingIcon(false);
-        updateContent();
+    document.addEventListener("click", function (e) {
     });
 }
 
