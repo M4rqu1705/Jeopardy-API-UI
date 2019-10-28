@@ -202,15 +202,24 @@ function autocomplete(field, possibleValues) {
         matchesD = document.createElement('div');
         matchesD.setAttribute('id', this.id + 'autocomplete-list');
         matchesD.setAttribute('class', 'autocomplete-items');
-        matchesD.style.width = this.style.width;
+
+        console.log("Matches are being positioned!")
+        matchesD.style.width = this.style.width + "px";
         matchesD.style.position = "fixed";
-        matchesD.style.top = $(this).offset().top + this.style.height;
-        matchesD.offsetLeft = $(this).offset().left;
+        matchesD.style.top = ($(this).offset().top + this.style.height*4) + "px";
+        console.log("This is " + this.id);
+        matchesD.style.left = $(this).offset().left + "px";
         matchesD.style.zIndex = "10";
 
+        console.log("Width = " + matchesD.style.width);
+        console.log("Position = " + matchesD.style.position);
+        console.log("Top = " + matchesD.style.top);
+        console.log("Left = " + matchesD.style.left);
+        console.log("Z index = " + matchesD.zIndex);
+        document.getElementsByTagName("body")[0].appendChild(matchesD);
+
         // Append the DIV element as a child of the autocomplete container:
-        this.parentNode.appendChild(matchesD);
-        // document.getElementsByTagName("body")[0].appendChild(matchesD);
+        // this.parentNode.appendChild(matchesD);
 
         for (i = 0; i < possibleValues.length; i++) {
             // Search criteria: first characters in common
