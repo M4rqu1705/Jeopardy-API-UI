@@ -17,6 +17,8 @@ body {
     color:#293241;
     width:100%;
     height:100%;
+
+    overflow-x:hidden;
 }
 
 
@@ -24,7 +26,7 @@ body {
 /* ====== Navbar ====== */
 /* ==================== */
 
-div#navbar{
+#navbar{
     position:absolute;
     top:0px;
     left:0px;
@@ -32,6 +34,7 @@ div#navbar{
     width:100%;
     height:110.99px;
     background-color:#98C1D9;
+    z-index:2;
 }
 
 #jeopardyLogo{
@@ -53,17 +56,11 @@ div#navbar{
     right:0px;
     bottom:0px;
 
-    /* width:83px; */
-    /* z-index:-1; */
-    width:407px;
-    /* z-index:2; */
-    border-radius:15px;
-    border-top:5px solid #EE6C4D;
-    border-bottom:5px solid #EE6C4D;
+    width:83px;
+    z-index:1;
 
     background-color:#F2F2F2;
     border-left:5px solid #EE6C4D;
-
 }
 
 /* ============================= */
@@ -83,7 +80,6 @@ div#navbar{
     justify-content:space-around;
     align-items:center;
 
-    /* display:none; */
 }
 
 .hiddenMenuIcons{
@@ -92,12 +88,15 @@ div#navbar{
     stroke:#293241;
     stroke-width:2.25px;
 
-    display:none;
 }
 
 /* =============================== */
 /* ====== Expanded Menu Bar ====== */
 /* =============================== */
+
+#expandedMenu > *{
+    visibility:hidden;
+}
 
 #expandedMenu{
     position:absolute;
@@ -117,13 +116,11 @@ div#navbar{
     overflow-y:auto;
     overflow-x:hidden;
 
-    /* display:none; */
+    visibility:hidden;
 }
 
 #expandedMenu > input{
-    padding-top:16px;
-    padding-bottom:16px;
-    padding-left:4px;
+    padding:20px 8px;
 }
 
 .expandedMenuIcons{
@@ -158,6 +155,7 @@ div#navbar{
     margin-bottom:auto;
     margin-right:50px;
     height:50%;
+    width:75%;
 }
 .autocomplete-items{
     position: absolute;
@@ -166,7 +164,7 @@ div#navbar{
     border-top: none;
     font: 20px Helvetica;
 }
-.autocomplete-items div {
+.autocomplete-items > div {
     padding: 10px;
     cursor: pointer;
     background-color: #fff;
@@ -193,13 +191,17 @@ div#navbar{
     margin-bottom:auto;
     margin-right:50px;
     height:50%;
+    width:75%;
     display:flex;
     flex-direction:row;
     justify-content:space-between;
     align-content:center;
 }
-#startDateInput{
+#airDateInputContainer > input{
     font: 20px Helvetica;
+    width:8em;
+}
+#startDateInput{
     margin-right:16px;
 }
 #endDateInput{
@@ -221,11 +223,12 @@ div#navbar{
 #valueInput{
     grid-row: 6/7;
     grid-column:3/4;
-    font: 26px Helvetica;
+    font: 20px Helvetica;
     margin-top:auto;
     margin-bottom:auto;
     width:40%;
     height:50%;
+    line-height:0px;
 }
 
 #searchButton{
@@ -243,9 +246,47 @@ div#navbar{
     width:80%;
     border:none;
     background-color:#3D5A80;
+    border-radius:15px;
+
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
 }
 
-#searchButton > svg{
-    stroke:black;
+#searchButton > button > svg{
+    color:#F2F2F2;
+    width:32px;
+    height:32px;
 }
 
+#closeMenu{
+    position:absolute;
+    width:40px;
+    height:40px;
+    top:0px;
+    right:15px;
+    color:#F2F2F2;;
+
+    border:none;
+    border-radius:15px;
+    background-color:#3D5A80;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#closeMenuIcon{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    width:30px;
+    height:30px;
+}
+
+button#reset-button.datetime-reset-button{
+    visibility:hidden;
+}

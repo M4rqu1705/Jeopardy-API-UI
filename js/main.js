@@ -203,19 +203,18 @@ function autocomplete(field, possibleValues) {
         matchesD.setAttribute('id', this.id + 'autocomplete-list');
         matchesD.setAttribute('class', 'autocomplete-items');
 
-        console.log("Matches are being positioned!")
-        matchesD.style.width = this.style.width + "px";
+        matchesD.style.width = this.offsetWidth + "px";
         matchesD.style.position = "fixed";
-        matchesD.style.top = ($(this).offset().top + this.style.height*4) + "px";
-        console.log("This is " + this.id);
+        matchesD.style.top = ($(this).offset().top + this.offsetHeight) + "px";
         matchesD.style.left = $(this).offset().left + "px";
         matchesD.style.zIndex = "10";
 
-        console.log("Width = " + matchesD.style.width);
-        console.log("Position = " + matchesD.style.position);
-        console.log("Top = " + matchesD.style.top);
-        console.log("Left = " + matchesD.style.left);
-        console.log("Z index = " + matchesD.zIndex);
+
+        // console.log("Width = " + matchesD.style.width);
+        // console.log("Position = " + matchesD.style.position);
+        // console.log("Top = " + matchesD.style.top);
+        // console.log("Left = " + matchesD.style.left);
+        // console.log("Z index = " + matchesD.zIndex);
         document.getElementsByTagName("body")[0].appendChild(matchesD);
 
         // Append the DIV element as a child of the autocomplete container:
@@ -227,7 +226,7 @@ function autocomplete(field, possibleValues) {
                 match = possibleValues[i]
 
                 suggestionD = document.createElement('div');
-                
+
 
                 // Make the matching letters bold
                 let content = '<strong>' + match.substr(0, value.length) + '</strong>';
@@ -310,9 +309,6 @@ function autocomplete(field, possibleValues) {
             }
         }
     }
-
-    document.addEventListener('click', function (e) {
-    });
 }
 
 
@@ -338,7 +334,9 @@ valueInput.addEventListener('keydown', function(e) {
 
 // Put restraints to the user input
 valueInput.addEventListener('input', function(e) {
+
     Value = valueInput.value;
+
     if(Value < 100 && (1<=Value && Value <= 6)){
         Value = Math.round(Value)*100;
     }else if(0<Value && Value<1){
@@ -350,7 +348,11 @@ valueInput.addEventListener('input', function(e) {
     }else{
         Value = undefined;
     }
-    valueInput.value = Value;
+    if(Value === undefined){
+        valueInput.value = "###";
+    }else{
+        valueInput.value = Value;
+    }
 });
 
 
@@ -388,6 +390,27 @@ endDateInput.addEventListener('input', function(e){
 
 });
 
+
+startDateInput.addEventListener('keydown', function(e) {
+    // If backspace or delete pressed
+    if(e.keyCode == 8 || e.keyCode == 46){
+        startDateInput.value = '';
+        AirDate[0] = new Date('January 1, 1950');
+    }
+});
+
+endDateInput.addEventListener('keydown', function(e) {
+    // If backspace or delete pressed
+    if(e.keyCode == 8 || e.keyCode == 46){
+        endDateInput.value = '';
+        AirDate[1] = new Date();
+    }
+});
+
+// ===============================
+// ======== Search Button ========
+// ===============================
+
 searchButton = document.getElementById('searchButton');
 
 searchButton.addEventListener('click', function(e){
@@ -408,4 +431,34 @@ document.addEventListener('keydown', function(e){
 // ======== Menu Bar ========
 // ==========================
 
-menuBar = document.getElementById('menuSection');
+menuBar = document.getElementById('menuBar');
+closeMenuButton = document.getElementById('closeMenu'); 
+
+menuBar.addEventListener('click', function(e){
+    menuBar.style.width = "407px";
+    menuBar.style.zIndex = 2;
+    menuBar.style.borderRadius = "15px";
+    menuBar.style.border = "5px solid #EE6C4D";
+    menuBar.style.right = "-10px";
+
+    $("#expandedMenu > *").css({"visibility":"visible"});
+    $("#hiddenMenu > *").css({"visibility":"hidden"});
+});
+
+closeMenuButton.addEventListener('click', function(e){
+    menuBar.setAttribute("style", "");
+    menuBar.style.width = "83px";
+    menuBar.style.zIndex = 1;
+    menuBar.style.borderRadius = "0px";
+    menuBar.style.borderTop = "none";
+    menuBar.style.borderBottom = "none";
+
+    console.log("Width = " + menuBar.style.width);
+    console.log("zIndex = " + menuBar.style.zIndex);
+    console.log("borderRadius = " + menuBar.style.borderRadius);
+    console.log("Top Border = " + menuBar.style.borderBotom);
+    console.log("Bottom border = " + menuBar.style.borderTop);
+
+    $("#expandedMenu > *").css({"visibility":"hidden"});
+    $("#hiddenMenu > *").css({"visibility":"visible"});
+});
