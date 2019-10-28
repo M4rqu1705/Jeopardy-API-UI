@@ -431,34 +431,19 @@ document.addEventListener('keydown', function(e){
 // ======== Menu Bar ========
 // ==========================
 
-menuBar = document.getElementById('menuBar');
-closeMenuButton = document.getElementById('closeMenu'); 
+var menuBar = document.getElementById('menuBar');
+var closeMenuButton = document.getElementById('closeMenu'); 
 
 menuBar.addEventListener('click', function(e){
     menuBar.style.width = "407px";
     menuBar.style.zIndex = 2;
-    menuBar.style.borderRadius = "15px";
-    menuBar.style.border = "5px solid #EE6C4D";
-    menuBar.style.right = "-10px";
 
-    $("#expandedMenu > *").css({"visibility":"visible"});
-    $("#hiddenMenu > *").css({"visibility":"hidden"});
+    closeMenuButton.style.opacity = 1;
 });
 
 closeMenuButton.addEventListener('click', function(e){
     menuBar.setAttribute("style", "");
     menuBar.style.width = "83px";
     menuBar.style.zIndex = 1;
-    menuBar.style.borderRadius = "0px";
-    menuBar.style.borderTop = "none";
-    menuBar.style.borderBottom = "none";
 
-    console.log("Width = " + menuBar.style.width);
-    console.log("zIndex = " + menuBar.style.zIndex);
-    console.log("borderRadius = " + menuBar.style.borderRadius);
-    console.log("Top Border = " + menuBar.style.borderBotom);
-    console.log("Bottom border = " + menuBar.style.borderTop);
-
-    $("#expandedMenu > *").css({"visibility":"hidden"});
-    $("#hiddenMenu > *").css({"visibility":"visible"});
 });

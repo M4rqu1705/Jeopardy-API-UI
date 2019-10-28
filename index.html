@@ -33,60 +33,38 @@
         </div>
 
         <div id='menuBar'>
-            <div id='hiddenMenu'>
-                <!-- Search -->
-                <svg id="searchIcon" class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <button id='closeMenu'>
+                <div id='closeMenuIcon'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+            </button>
+            <!-- Category -->
+            <div id='categoryIcon' class="menuIcons">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <p id="categoryHeader">By Category</p>
+            <input id="categoryInput" type="text" name="category" placeholder="Baseball">
 
-                <!-- Filter -->
-                <svg class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-
-                <!-- Check -->
-                <svg class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-
-                <!-- Layers -->
-                <svg class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-
-                <!-- Calendario -->
-                <svg class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
-
-                <!-- Award -->
-                <svg class="hiddenMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.2 13.9L7 23l5-3 5 3-1.2-9.12"/></svg>
+            <!-- Calendario -->
+            <div id='airDateIcon' class="menuIcons">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
+            </div>
+            <p id="airDateHeader">Air Date</p>
+            <div id="airDateInputContainer">
+                <input id='startDateInput' type='date'>
+                <input id='endDateInput' type='date'>
             </div>
 
-            <div id='expandedMenu'>
-                <button id='closeMenu'>
-                    <div id='closeMenuIcon'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </div>
-                </button>
-                <!-- Layers -->
-                <div id='categoryIcon'>
-                    <svg class="expandedMenuIcons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                </div>
-                <p id="categoryHeader">By Category</p>
-                <input id="categoryInput" type="text" name="category" placeholder="Baseball">
+            <!-- Award -->
+            <div id='valueIcon' class="menuIcons">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.2 13.9L7 23l5-3 5 3-1.2-9.12"/></svg>
+            </div>
+            <p id="valueHeader">Difficulty / Value</p>
+            <!-- <input id='valueInput' type='number' value="100" min="100" max="600" step="100"> -->
+            <input id='valueInput' type='text' placeholder="100">
 
-                <!-- Calendario -->
-                <div id='airDateIcon'>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
-                </div>
-                <p id="airDateHeader">Air Date</p>
-                <div id="airDateInputContainer">
-                    <input id='startDateInput' type='date'>
-                    <input id='endDateInput' type='date'>
-                </div>
-
-                <!-- Award -->
-                <div id='valueIcon'>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.2 13.9L7 23l5-3 5 3-1.2-9.12"/></svg>
-                </div>
-                <p id="valueHeader">Difficulty / Value</p>
-                <!-- <input id='valueInput' type='number' value="100" min="100" max="600" step="100"> -->
-                <input id='valueInput' type='text' placeholder="100">
-
-                <div id='searchButton'>
-                    <button class='expandedMenuIcons'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
-                </div>
+            <div id='searchButton'>
+                <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
             </div>
         </div>
 
