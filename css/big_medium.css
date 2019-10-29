@@ -61,17 +61,11 @@ body {
 
     z-index:1;
 
-    width:83px;
-    transition: width 0.3s;
-    transition-timing-function: ease-in-out;
-
-
-    padding-left:16px;
+    width:90px;
+    transition: width 0.3s ease-in-out;
 
     background-color:#F2F2F2;
     border:5px solid #EE6C4D;
-    border-radius:15px;
-
 
     display:grid;
     grid-template-rows:repeat(12,60px);
@@ -82,7 +76,6 @@ body {
     overflow-y:auto;
     overflow-x:hidden;
 
-    visibility:visible;
 }
 
 #menuBar > input{
@@ -90,6 +83,7 @@ body {
 }
 
 .menuIcons{
+    padding:0px 16px;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -222,7 +216,7 @@ body {
     height:32px;
 }
 
-#closeMenu{
+#closeMenuButton{
     position:absolute;
     width:40px;
     height:40px;
@@ -257,4 +251,33 @@ body {
 
 button#reset-button.datetime-reset-button{
     visibility:hidden;
+}
+
+
+/* ==================== */
+/* ====== Results ====== */
+/* ==================== */
+
+#searchResults{
+    position:absolute;
+    top:111px;
+    left:0px;
+    right:0px;
+    bottom:0px
+
+    padding:0px;
+}
+
+.entry{
+
+}
+.question{
+
+}
+.details{
+    font: 20px Helvetica;
+    color:#29324188;
+    margin:0px;
+    padding:0px;
+    margin-left:28px;
 }

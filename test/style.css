@@ -1,0 +1,138 @@
+*{
+    /* Style */
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+/* Helper styles */
+.content-center{
+    /* Position */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.content-left{
+    /* Position */
+    display:flex;
+    justify-content:left;
+    align-items:center;
+}
+.content-right{
+    /* Position */
+    display:flex;
+    justify-content:right;
+    align-items:center;
+}
+
+html{
+    /* Position */
+    width:100%; height:100%;
+    overflow:hidden;
+}
+
+body{
+    /* Position */
+    width:100%; height:100%;
+    display:grid;
+    grid-template-columns:auto 100px;
+    grid-template-rows: 100px auto;
+    /* Style */
+    font:30px Arial;
+    transition: grid-template-columns 0.3s ease-in-out;
+}
+
+/* ==================== */
+/* ====== Header ====== */
+/* ==================== */
+header{
+    /* Position */
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+    /* Style */
+    background:#98C1D9;
+}
+#header-logo{
+    height:75%;
+    margin:20px;
+}
+
+
+/* ====================== */
+/* ====== Menu Bar ====== */
+/* ====================== */
+aside{
+    /* Position */
+    width:500px;
+    right:-400px;
+
+    z-index:2;
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    display:grid;
+    grid-template-columns:100px auto;
+    grid-template-row:repeat(3, 1fr);
+    /* grid-gap:5px; */
+    justify-items: stretch;
+    align-items: stretch;
+    /* Style */
+    background:#F2F2F2;
+    border:5px solid #EE6C4D;
+
+    padding:16px 16px 16px 0px;
+    transition: width 0.3s ease-in-out;
+    overflow-y:auto;
+}
+.aside-icon{
+    /* Position */
+    grid-column: 1 / 2;
+    grid-row: auto;
+}
+.aside-icon > svg{
+    /* Position */
+    width:45px;
+    height:45px;
+}
+.aside-input{
+    /* Position */
+    width:100%;
+    height:50px;
+    margin:auto;
+    padding:5px 10px;
+    grid-column: 2 / 3;
+    grid-row: auto;
+    /* Style */
+    font:26px Arial; 
+}
+.aside-section-label{
+    padding-top:20px;
+    grid-column: 2 / 3;
+}
+#close-menu{
+    /* Position */
+    grid-column: 2 / 3;
+}
+#search-button{
+    /* Position */
+    width:75%;
+    height:100px;
+    margin:auto;
+    margin-top:32px;
+    padding:10px;
+    grid-column: 2 / 3;
+    /* Style */
+    border:none;
+    background-color:#3D5A80;
+    border-radius:15px;
+}
+
+/* ===================== */
+/* ====== Content ====== */
+/* ===================== */
+article{
+    /* Position */
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    /* Style */
+    /* background: #FE2712; */
+}

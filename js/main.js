@@ -67,7 +67,7 @@ function getURL(){
         url.push("category=".concat(categories[Category]));
     }
 
-    if(defined(Value) && [100, 200, 300, 400, 500, 600].includes(Value)){
+    if(defined(Value) && [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000].includes(Value)){
         url.push("value=".concat(Value));
     }
 
@@ -119,10 +119,10 @@ function updateContent(){
 
                     airdate = " ".concat(month[new Number(airdate.getMonth())], " " , new String(airdate.getDate()), ", ", new String(airdate.getFullYear()));
 
-                    const TEXT_WIDTH = 50;
-                    if(question.length > TEXT_WIDTH){
-                        question = question.slice(0, TEXT_WIDTH-3).concat("...")
-                    }
+                    // const TEXT_WIDTH = 50;
+                    // if(question.length > TEXT_WIDTH){
+                        // question = question.slice(0, TEXT_WIDTH-3).concat("...")
+                    // }
 
                     // Entry container
                     entryD = document.createElement('div');
@@ -209,12 +209,6 @@ function autocomplete(field, possibleValues) {
         matchesD.style.left = $(this).offset().left + "px";
         matchesD.style.zIndex = "10";
 
-
-        // console.log("Width = " + matchesD.style.width);
-        // console.log("Position = " + matchesD.style.position);
-        // console.log("Top = " + matchesD.style.top);
-        // console.log("Left = " + matchesD.style.left);
-        // console.log("Z index = " + matchesD.zIndex);
         document.getElementsByTagName("body")[0].appendChild(matchesD);
 
         // Append the DIV element as a child of the autocomplete container:
@@ -268,7 +262,7 @@ function autocomplete(field, possibleValues) {
         }else if (e.keyCode == 13) {   // Enter key
             e.preventDefault();
             if(defined(list)){
-                // Search for currently focused entry 
+                // Search for currently focused entry
                 if(currentFocus > -1) {
                     list[currentFocus].click();
                 }else{
@@ -335,16 +329,21 @@ valueInput.addEventListener('keydown', function(e) {
 // Put restraints to the user input
 valueInput.addEventListener('input', function(e) {
 
-    Value = valueInput.value;
+    v = String(valueInput.value);
+    if(v.startsWith("###") && !isNaN(v.substring(3))){
+        Value = Number(v.substring(3));
+    }else if(v !== "###"){
+        Value = Number(v);
+    }
 
-    if(Value < 100 && (1<=Value && Value <= 6)){
+    if(Value < 100 && (1 <= Value && Value <= 10)){
         Value = Math.round(Value)*100;
     }else if(0<Value && Value<1){
         Value = 100;
-    }else if(6<Value && Value<100){
-        Value = 600;
-    }else if(Value > 600){
-        Value = 600;
+    }else if(10<=Value && Value<100){
+        Value = 1000;
+    }else if(Value >= 1000){
+        Value = 1000;
     }else{
         Value = undefined;
     }
@@ -368,7 +367,7 @@ startDateInput.value = new Date('January 1, 1950').toISOString().slice(0,10);
 endDateInput.value = new Date().toISOString().slice(0,10);
 
 startDateInput.addEventListener('input', function(e){
-    // Make sure startDate is always less than or equal to endDate 
+    // Make sure startDate is always less than or equal to endDate
     if(new Date(startDateInput.value).getTime() > new Date(endDateInput.value).getTime()){
         startDateInput.value = new Date(endDateInput.value).toISOString().slice(0,10);
     }
@@ -381,7 +380,7 @@ startDateInput.addEventListener('input', function(e){
 });
 
 endDateInput.addEventListener('input', function(e){
-    // Make sure startDate is always less than or equal to endDate 
+    // Make sure startDate is always less than or equal to endDate
     if(new Date(startDateInput.value).getTime() > new Date(endDateInput.value).getTime()){
         endDateInput.value = new Date(startDateInput.value).toISOString().slice(0,10);
     }
@@ -432,18 +431,20 @@ document.addEventListener('keydown', function(e){
 // ==========================
 
 var menuBar = document.getElementById('menuBar');
-var closeMenuButton = document.getElementById('closeMenu'); 
+var closeMenuButton = document.getElementById('closeMenuButton');
 
 menuBar.addEventListener('click', function(e){
-    menuBar.style.width = "407px";
+    menuBar.style.width = "450px";
     menuBar.style.zIndex = 2;
-
+    menuBar.style.scroll = "hidden";
+    menuBar.style.borderRadius = "15px";
     closeMenuButton.style.opacity = 1;
 });
 
-closeMenuButton.addEventListener('click', function(e){
-    menuBar.setAttribute("style", "");
-    menuBar.style.width = "83px";
+closeMenuButton.addEventListener('mousedown', function(e){
+    menuBar.style.width = "90px";
     menuBar.style.zIndex = 1;
-
+    menuBar.style.scroll = "auto";
+    menuBar.style.borderRadius = "0px";
+    closeMenuButton.style.opacity = 0;
 });
