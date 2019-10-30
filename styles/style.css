@@ -5,6 +5,16 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: Helvetica;
+    src: url('./Helvetica.ttf');
+}
+
+@font-face {
+    font-family: Korinna;
+    src: url('./Korinna-Regular.ttf');
+}
+
 /* Helper styles */
 .content-center{
     /* Position */
@@ -29,6 +39,8 @@ html{
     /* Position */
     width:100%; height:100%;
     overflow:hidden;
+    color:#293241;
+    font:26px Helvetica;
 }
 
 body{
@@ -38,7 +50,6 @@ body{
     grid-template-columns:auto 100px;
     grid-template-rows: 100px auto;
     /* Style */
-    font:30px Arial;
     transition: grid-template-columns 0.3s ease-in-out;
 }
 
@@ -92,25 +103,55 @@ aside{
     /* Position */
     width:45px;
     height:45px;
+    stroke:#
 }
 .aside-input{
     /* Position */
-    width:100%;
+    /* width:100%; */
     height:50px;
-    margin:auto;
+    margin-left:0px;
+    margin-right:16px;
     padding:5px 10px;
     grid-column: 2 / 3;
     grid-row: auto;
     /* Style */
-    font:26px Arial; 
+    color:#293241;
+    font:26px Helvetica; 
 }
 .aside-section-label{
-    padding-top:20px;
+    padding-top:10px;
     grid-column: 2 / 3;
+}
+.autocomplete-items > div{
+    background:#DFDFDF;
+    border:1px solid #808080;
+    color:#293241;
+    font: 20px Helvetica;
+    padding:8px;
+    transition:font-size 0.05s ease-in-out;
+}
+.autocomplete-active{
+    font-size:22px!important;
+    border:2px solid black!important;
 }
 #close-menu{
     /* Position */
     grid-column: 2 / 3;
+}
+#air-date-container{
+    width:100%;
+    height:50px;
+    grid-column: 2 / 3;
+    grid-row: auto;
+}
+#air-date-container > input{
+    width:45%;
+    height:100%;
+    margin:0px;
+    margin-right:16px;
+    /* Style */
+    color:#293241;
+    font:26px Helvetica; 
 }
 #search-button{
     /* Position */
@@ -131,8 +172,35 @@ aside{
 /* ===================== */
 article{
     /* Position */
+    position:relative;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
     /* Style */
-    /* background: #FE2712; */
+    background: #FFFFFF;
+    display:flex;
+    flex-direction:column;
+    justify-content
+
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.entry{
+    padding:20px;
+    padding-bottom:0px;
+
+
+}
+.question{
+    /* Style */
+    font:26px Helvetica; 
+    color:#3D5A80;
+
+}
+.details{
+    /* Position */
+    padding-left:10px;
+    /* Style */
+    font:20px Helvetica; 
+    color:#29324180;
 }
