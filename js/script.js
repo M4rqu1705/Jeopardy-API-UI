@@ -126,8 +126,12 @@ function autocomplete(field, possibleValues) {
                     list[0].click();
                 }
             }
-
         }
+
+        // Make sure to also close suggestions as menu is being closed 
+        closeMenuButton.addEventListener("click", function (e){
+            closeAllLists();
+        });
     });
 
     function addActive(items) {
@@ -151,7 +155,7 @@ function autocomplete(field, possibleValues) {
         }
     }
 
-    global function closeAllLists(element) {
+    function closeAllLists(element) {
         // Close all autocomplete lists in the document, except the one passed as an argument:
         let items = document.getElementsByClassName('autocomplete-items');
         for (let i = 0; i < items.length; i++) {
@@ -306,9 +310,9 @@ function triggerSearch(){
 // Show loading spinner
 function loadingSpinner(state){
     // if(state){
-        // document.getElementById("loadingIcon").style.display = "block";
+    // document.getElementById("loadingIcon").style.display = "block";
     // }else{
-        // document.getElementById("loadingIcon").style.display = "none";
+    // document.getElementById("loadingIcon").style.display = "none";
     // }
 }
 
@@ -319,14 +323,14 @@ function loadingSpinner(state){
 
 function getURL(){
     // https://cors-anywhere.herokuapp.com/
-    defaultURL = 'http://jservice.io/api/random/?count=10';
-    URL = ['http://jservice.io/api/clues/?'];
+    defaultURL = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=10';
+    URL = ['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
 
     // Get categories if not retrieved yet
     if(!defined(categories)){
         $.ajax({
-            // url:        "categories.json",
-            url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
+            url:        "categories.json",
+            // url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
             cache:      false,
             dataType:   "json",
             success:    function(data){
@@ -414,7 +418,7 @@ function updateContent(){
                     // Restrain question width 
                     // const TEXT_WIDTH = 50;
                     // if(question.length > TEXT_WIDTH){
-                        // question = question.slice(0, TEXT_WIDTH-3).concat("...")
+                    // question = question.slice(0, TEXT_WIDTH-3).concat("...")
                     // }
 
                     // Entry container
@@ -434,40 +438,30 @@ function updateContent(){
                     detailsP.classList.add('details');
                     detailsP.textContent = [capitalize(category), airdate, value].join(" • ");
 
-                    // Other data
-                    questionI = document.createElement('input');
-                    answerI = document.createElement('input');
-                    valueI = document.createElement('input');
-                    categoryI = document.createElement('input');
-                    airDateI = document.createElement('input');
-
-                    questionI.setAttribute('type', 'hidden');
-                    answerI.setAttribute('type', 'hidden');
-                    valueI.setAttribute('type', 'hidden');
-                    categoryI.setAttribute('type', 'hidden');
-                    airDateI.setAttribute('type', 'hidden');
-
-                    questionI.setAttribute('value', question);
-                    answerI.setAttribute('value', answer);
-                    valueI.setAttribute('value', value);
-                    categoryI.setAttribute('value', capitalize(category));
-                    airDateI.setAttribute('value', airdate);
-
-
                     entryD.appendChild(questionP);
                     entryD.appendChild(detailsP);
-                    entryD.appendChild(questionI);
-                    entryD.appendChild(answerI);
-                    entryD.appendChild(valueI);
-                    entryD.appendChild(categoryI);
-                    entryD.appendChild(airDateI);
 
-                    entryD.addEventListener('click', function(e){
-                        console.log("Clickety click click!");
-                    });
                     // #############################################################
                     // ###################### ON CLICK #############################
                     // #############################################################
+                    entryD.addEventListener('click', function(e){
+                        article = document.getElementsByTagName('article')[0];
+                        answerScreenD = document.createElement('div');
+                        answerScreenD.id = 'answer-screen';
+                        answerScreenD.style = article.style;
+
+                        answerScreenD.style.backgroundColor = "#F2F2F2";
+                        console.log(Array.prototype.indexOf.call(article.children, entryD));
+                        // console.log(Array.prototype.slice.call(article.children).indexOf(entryD));
+                        answerScreenD.style.height = "600px!important";
+                        answerScreenD.style.padding = "16px";
+
+                        answerScreenD.textContent = [question, answer, capitalize(category), airdate, value].join(" • ");
+
+                        article.insertBefore(answerScreenD, article.firstChild);
+
+                        console.log("Clickety click click!");
+                    });
 
                     searchResultsD.appendChild(entryD);
                 }
