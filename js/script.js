@@ -128,7 +128,7 @@ function autocomplete(field, possibleValues) {
             }
         }
 
-        // Make sure to also close suggestions as menu is being closed 
+        // Make sure to also close suggestions as menu is being closed
         closeMenuButton.addEventListener("click", function (e){
             closeAllLists();
         });
@@ -310,9 +310,13 @@ function triggerSearch(){
 // Show loading spinner
 function loadingSpinner(state){
     // if(state){
-    // document.getElementById("loadingIcon").style.display = "block";
+        // document.getElementById("loadingIcon").style.visibility = "visible";
+        // document.getElementById("loadingIcon").style.height = "100%";
+        // document.getElementsByTagName("body")[0].style.height = "0px";
     // }else{
-    // document.getElementById("loadingIcon").style.display = "none";
+        // document.getElementById("loadingIcon").style.visibility = "hidden";
+        // document.getElementById("loadingIcon").style.height = "0%";
+        // document.getElementsByTagName("body")[0].style.height = "100%";
     // }
 }
 
@@ -323,14 +327,14 @@ function loadingSpinner(state){
 
 function getURL(){
     // https://cors-anywhere.herokuapp.com/
-    defaultURL = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=10';
-    URL = ['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
+    defaultURL = 'http://jservice.io/api/random/?count=10';
+    URL = ['http://jservice.io/api/clues/?'];
 
     // Get categories if not retrieved yet
     if(!defined(categories)){
         $.ajax({
-            url:        "categories.json",
-            // url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
+            // url:        "categories.json",
+            url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
             cache:      false,
             dataType:   "json",
             success:    function(data){
@@ -415,12 +419,6 @@ function updateContent(){
                         new String(airdate.getDate()), ", ",            // Day
                         new String(airdate.getFullYear()));             // Year
 
-                    // Restrain question width 
-                    // const TEXT_WIDTH = 50;
-                    // if(question.length > TEXT_WIDTH){
-                    // question = question.slice(0, TEXT_WIDTH-3).concat("...")
-                    // }
-
                     // Entry container
                     entryD = document.createElement('div');
                     entryD.classList.add('entry');
@@ -445,22 +443,54 @@ function updateContent(){
                     // ###################### ON CLICK #############################
                     // #############################################################
                     entryD.addEventListener('click', function(e){
+                        body = document.getElementsByTagName('body')[0];
                         article = document.getElementsByTagName('article')[0];
+
                         answerScreenD = document.createElement('div');
                         answerScreenD.id = 'answer-screen';
-                        answerScreenD.style = article.style;
 
-                        answerScreenD.style.backgroundColor = "#F2F2F2";
-                        console.log(Array.prototype.indexOf.call(article.children, entryD));
-                        // console.log(Array.prototype.slice.call(article.children).indexOf(entryD));
-                        answerScreenD.style.height = "600px!important";
-                        answerScreenD.style.padding = "16px";
+                        answersDivs = [
+                            document.createElement('div'),  // Exit button
+                            document.createElement('p'),    // Question
+                            document.createElement('p'),    // Answer
+                            document.createElement('div'),  // Category, Airdate and Value separated by " • "
+                        ]
 
-                        answerScreenD.textContent = [question, answer, capitalize(category), airdate, value].join(" • ");
+                        answersDivs[0].id = 'answer-screen-close';
+                        answersDivs[1].id = 'answer-screen-question';
+                        answersDivs[2].id = 'answer-screen-answer';
+                        answersDivs[3].id = 'answer-screen-details';
 
-                        article.insertBefore(answerScreenD, article.firstChild);
+                        answersDivs[1].classList.add('content-center');
+                        answersDivs[2].classList.add('content-center');
+                        answersDivs[3].classList.add('content-center');
 
-                        console.log("Clickety click click!");
+
+                        answersDivs[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+                        answersDivs[1].innerHTML = '<span>' + capitalize(question.trim()) + '</span>';
+                        answersDivs[2].innerHTML = '<span>' + capitalize(answer.trim()) + '</span>';
+                        answersDivs[3].innerHTML = '<span>' + [capitalize(category.trim()), airdate.trim(), value].join(" • ") + '</span>'; 
+
+                        answersDivs[0].addEventListener('click', function(e){
+                            body.removeChild(answerScreenD);
+                            article.style.height = "100%";
+                        });
+
+                        for(c = 0; c<answersDivs.length; c++){
+                            answerScreenD.appendChild(answersDivs[c]);
+                        }
+
+                        body.insertBefore(answerScreenD, article);
+
+
+                        // Adjust font size
+                        $(answersDivs[1]).textfill({"maxFontPixels":200, "minFontPixels":Number($(answersDivs[2].children[0]).css("font-size").slice(0,-2))});
+                        $(answersDivs[2]).textfill({"maxFontPixels":200, "minFontPixels":15, "widthOnly":true});
+                        $(answersDivs[3]).textfill({"maxFontPixels":200, "minFontPixels":Number($(answersDivs[2].children[0]).css("font-size").slice(0,-2)), "widthOnly":true});
+
+                        article.style.height = "0px";
+                        // setTimeout(new ResizeObserver(function(e){ answersDivs[0].click(); }).observe(answerScreenD), 100);
+
                     });
 
                     searchResultsD.appendChild(entryD);
@@ -468,7 +498,6 @@ function updateContent(){
             },
             complete:   function(){
                 loadingSpinner(false);
-                console.log("Complete!");
             },
             error:      function(err){
                 console.log(err);
