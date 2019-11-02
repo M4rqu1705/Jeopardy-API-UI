@@ -31,8 +31,13 @@
     justify-content:right;
     align-items:center;
 }
-
 .content-top{
+    /* Position */
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+.content-bottom{
     /* Position */
     display:flex;
     justify-content:center;
@@ -62,6 +67,10 @@ body{
 /* ====== Header ====== */
 /* ==================== */
 header{
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-items:center;
     /* Position */
     grid-row: 1 / 2;
     grid-column: 1 / -1;
@@ -88,7 +97,6 @@ aside{
     display:grid;
     grid-template-columns:3.846154em auto;
     grid-template-row:repeat(3, 1fr);
-    /* grid-gap:0.192308em; */
     justify-items: stretch;
     align-items: stretch;
     /* Style */
@@ -123,7 +131,7 @@ aside{
     grid-row: auto;
     /* Style */
     color:#293241;
-    font:1em Helvetica; 
+    font:1em Helvetica;
 }
 .aside-section-label{
     padding-top:0.384615em;
@@ -158,7 +166,7 @@ aside{
     margin-right:0.615385em;
     /* Style */
     color:#293241;
-    font:1em Helvetica; 
+    font:1em Helvetica;
 }
 #search-button{
     /* Position */
@@ -181,14 +189,10 @@ aside{
 /* ===================== */
 #search-results{
     /* Position */
-    position:relative;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
     /* Style */
     background-color: #FFFFFF;
-    display:flex;
-    flex-direction:column;
-    justify-content
 
     overflow-y:auto;
     overflow-x:hidden;
@@ -201,7 +205,7 @@ aside{
 }
 .question{
     /* Style */
-    font:1em Helvetica; 
+    font:1em Helvetica;
     color:#293D56;
     white-space: nowrap;
     overflow:hidden;
@@ -211,7 +215,7 @@ aside{
     /* Position */
     padding-left:0.384615em;
     /* Style */
-    font:0.76923em Helvetica; 
+    font:0.76923em Helvetica;
     color:#29324180;
     white-space: nowrap;
     overflow:hidden;
@@ -239,6 +243,7 @@ aside{
     background-color:#F2F2F2;
     overflow-y:auto;
     overflow-x:hidden;
+    text-align:center;
 }
 #answer-screen-close{
     /* Position */
@@ -318,13 +323,179 @@ aside{
     100% { transform: rotate(360deg); }
 }
 
-/* Adjust layout if on portrait phone or tablet */
-@media only screen and (max-width: 767px) and (orientation: portrait) {
 
+
+
+/* Adjust layout if on portrait phone or tablet */
+@media only screen and (max-width: 767px){
+    html{
+        /* Style */
+        font:20px Helvetica;
+    }
+
+    body{
+        /* Position */
+        grid-template-columns: auto;
+        grid-template-rows: 3.846154em 3.384615em auto;
+        /* Style */
+        transition: grid-template-rows 0.3s ease-in-out;
+    }
+
+    /* ==================== */
+    /* ====== Header ====== */
+    /* ==================== */
+    header{
+        /* Position */
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        grid-row: 1 / 2;
+        grid-column: 1 / -1;
+    }
+    #header-logo{
+        height:65%;
+    }
+
+    /* ====================== */
+    /* ====== Menu Bar ====== */
+    /* ====================== */
+    aside{
+        /* Position */
+        width:100%;
+
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+
+        grid-template-columns:repeat(3, 1fr);
+        grid-template-rows: 3.846145em 1.538462em repeat(8, 1fr);
+        grid-template-areas: 
+        "ic ic ic"
+        "x  x  x "
+        ".  .  . "
+        "ci ci ci"
+        ".  .  . "
+        "di di di"
+        ".  .  . "
+        "vi vi vi "
+        "sb sb sb"
+        ".  .  . ";
+        /* Style */
+
+        padding:0.615385em 0.615385em 0 0.615385em;
+        transition: height 0.3s ease-in-out;
+        overflow:hidden;
+    }
+    .aside-icon{
+        /* Position */
+        grid-area:ic;
+        grid-column:auto;
+    }
+    .aside-input{
+        /* Position */
+        width:100%;
+    }
+    #category-input{grid-area:ci;}
+    #air-date-container{grid-area:di;}
+    #value-input{grid-area:vi;}
+    .aside-section-label{
+        /* Position */
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        /* grid-area:lc; */
+        grid-column:1 / -1;
+        grid-row:auto;
+    }
+    #close-menu{
+        /* Position */
+        grid-area:x;
+    }
+    #search-button{
+        /* Position */
+        grid-area:sb;
+        margin:2em;
+    }
+
+    /* ===================== */
+    /* ====== Content ====== */
+    /* ===================== */
+    #search-results{
+        /* Position */
+        padding:0.25em;
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+    }
+    .entry{
+        padding:1em;
+        padding-bottom:0;
+    }
+    #search-results > .entry:last-child{
+        margin-bottom:2em;
+    }
+    .question{
+        /* Style */
+        color:#293D56;
+        white-space: initial;
+    }
+
+    #answer-screen{
+        /* Position */
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+        grid-template-columns:repeat(10, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-areas:
+        "q q q q q q q q q x"
+        "q q q q q q q q q ."
+        "q q q q q q q q q ."
+        "a a a a a a a a . ."
+        "d d d d d d d d d .";
+    }
+    #answer-screen-close{
+        /* Position */
+        margin:0;
+        padding:0.1em;
+        width:100%;
+        height:100%;
+        grid-area:x;
+        display:flex;
+        flex-direction:column;
+        justify-content:start;
+        align-items:end;
+    }
+
+    #loading-icon-container{
+        /* Position */
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+        width:100%;
+        height:100%;
+        padding:2em;
+    }
+    #loading-icon{
+        /* Position */
+        z-index:10;
+        /* Style */
+        border: 2em solid #f3f3f3;
+        border-top: 2em solid #3D5A80;
+        border-radius: 50%;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 }
 
 /*
  * Thank you
- * https://stackoverflow.com/questions/16443380/common-css-media-queries-break-points 
- * for the recommended sisez
+ * https://stackoverflow.com/questions/16443380/common-css-media-queries-break-points
+ * for the recommended sizes
  * */

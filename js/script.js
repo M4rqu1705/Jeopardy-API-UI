@@ -6,17 +6,25 @@ aside = document.getElementsByTagName("aside")[0];
 closeMenuButton = document.getElementById("close-menu");
 
 aside.addEventListener("mousedown", function (e){
-
-    body.style.gridTemplateColumns = "auto 19.230769em";
-    aside.style.right = '0px';
+    if(window.innerWidth > 767){
+        body.style.gridTemplateColumns = "auto 19.230769em";
+        aside.style.right = '0px';
+    }else{
+        body.style.gridTemplateRows = "3.846154em auto 1em";
+    }
 
     document.dispatchEvent(new Event('closeAnswers'));
 });
 
 closeMenuButton.addEventListener("click", function (e){
-    body.style.gridTemplateColumns = "auto 3.846154em";
-    aside.style.right = '-15.384615em';
-    triggerSearch();
+    if(window.innerWidth > 767){
+        body.style.gridTemplateColumns = "auto 3.846154em";
+        aside.style.right = '-15.384615em';
+    }else{
+        body.style.gridTemplateRows = "3.846154em 3.384615em auto";
+    }
+
+    setTimeout(delay(10), 1);
 });
 
 async function focusInput(element){
@@ -99,7 +107,6 @@ function autocomplete(field, possibleValues) {
                     field.value = this.getElementsByTagName('input')[0].value;
                     Category = field.value;
                     closeAllLists();
-                    triggerSearch();
                 });
                 matchesD.appendChild(suggestionD);
 
@@ -279,6 +286,7 @@ endDateInput.addEventListener('keydown', function(e) {
 searchButton = document.getElementById('search-button');
 
 searchButton.addEventListener('click', function(e){
+    closeMenuButton.click()
     triggerSearch();
 });
 
@@ -286,6 +294,13 @@ searchButton.addEventListener('click', function(e){
 // ==================================
 // ======== Helper Functions ========
 // ==================================
+
+function delay(ms){
+    endTime = new Date().getTime() + ms;
+    while(new Date().getTime() < endTime){
+        ;
+    }
+}
 
 // Make input sanitazion easier to prevent mishaps
 function sanitize(str) {
@@ -324,9 +339,15 @@ function loadingSpinner(state){
         loadingIconContainer.style.visibility = "visible";
         loadingIconContainer.style.height = "100%";
         loadingIconContainer.style.width = "100%";
-        loadingIcon.style.height = "80%";
-        loadingIcon.style.width = loadingIcon.offsetHeight + "px";
-        loadingIcon.style.height = loadingIcon.offsetHeight + "px";
+        if(window.innerWidth <= 767){
+            loadingIcon.style.width = "80%";
+            loadingIcon.style.width = loadingIcon.offsetWidth + "px";
+            loadingIcon.style.height = loadingIcon.offsetWidth + "px";
+        } else{
+            loadingIcon.style.height = "80%";
+            loadingIcon.style.width = loadingIcon.offsetHeight + "px";
+            loadingIcon.style.height = loadingIcon.offsetHeight + "px";
+        }
         searchResults.style.height = "0";
     }else{
         loadingIconContainer.style.visibility = "hidden";
@@ -342,16 +363,16 @@ function loadingSpinner(state){
 // ===================================
 
 function getURL(){
-    // defaultURL = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=10';
-    // URL = ['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
-    defaultURL = 'http://jservice.io/api/random/?count=10';
-    URL = ['http://jservice.io/api/clues/?'];
+    defaultURL = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=20';
+    URL = ['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
+    // defaultURL = 'http://jservice.io/api/random/?count=20';
+    // URL = ['http://jservice.io/api/clues/?'];
 
     // Get categories if not retrieved yet
     if(!defined(categories)){
         $.ajax({
-            // url:        "categories.json",
-            url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
+            url:        "categories.json",
+            // url:        "https://M4rqu1705.github.io/Jeopardy-API-UI/categories.json",
             cache:      false,
             dataType:   "json",
             success:    function(data){
@@ -478,15 +499,19 @@ function updateContent(){
                         answersDivs[2].id = 'answer-screen-answer';
                         answersDivs[3].id = 'answer-screen-details';
 
-                        answersDivs[1].classList.add('content-center');
-                        answersDivs[2].classList.add('content-center');
-                        answersDivs[3].classList.add('content-center');
+                        answersDivs[1].class = 'content-center';
+                        answersDivs[2].class = 'content-center';
+                        answersDivs[3].class = 'content-center';
 
 
                         answersDivs[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
                         answersDivs[1].innerHTML = '<span>' + capitalize(question.trim()) + '</span>';
                         answersDivs[2].innerHTML = '<span>' + capitalize(answer.trim()) + '</span>';
-                        answersDivs[3].innerHTML = '<span>' + [capitalize(category.trim()), airdate.trim(), value].join(" • ") + '</span>'; 
+                        if(window.innerWidth <= 767){
+                            answersDivs[3].innerHTML = '<span>' + ["<strong>Category:</strong> " + capitalize(category.trim()), "<strong>Date:</strong> " + airdate.trim(), "<strong>Value:</strong> " + value].join("<br>") + '</span>'; 
+                        } else{
+                            answersDivs[3].innerHTML = '<span>' + [capitalize(category.trim()), airdate.trim(), value].join(" • ") + '</span>'; 
+                        }
 
                         answersDivs[0].addEventListener('click', function(e){
                             body.removeChild(answerScreenD);
@@ -505,7 +530,12 @@ function updateContent(){
                         firstsFont = Number($(answersDivs[1].children[0]).css('font-size').slice(0,-2));
                         $(answersDivs[2]).textfill({"maxFontPixels":firstsFont, "minFontPixels":15, "widthOnly":true});
                         secondsFont = Number($(answersDivs[2].children[0]).css('font-size').slice(0,-2));
-                        $(answersDivs[3]).textfill({"maxFontPixels":secondsFont, "minFontPixels":15, "widthOnly":true});
+
+                        if(window.innerWidth <= 767){
+                            $(answersDivs[3]).textfill({"maxFontPixels":secondsFont, "minFontPixels":15, "widthOnly":false});
+                        }else{
+                            $(answersDivs[3]).textfill({"maxFontPixels":secondsFont, "minFontPixels":15, "widthOnly":true});
+                        }
 
                         article.style.height = "0";
 
@@ -533,9 +563,3 @@ function updateContent(){
     }, 1);
 }
 
-function delay(ms){
-    endTime = new Date().getTime() + ms;
-    while(new Date().getTime() < endTime){
-        ;
-    }
-}
