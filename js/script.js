@@ -6,22 +6,29 @@ aside = document.getElementsByTagName("aside")[0];
 closeMenuButton = document.getElementById("close-menu");
 
 aside.addEventListener("mousedown", function (e){
-    body.style.gridTemplateColumns = "auto 500px";
+
+    body.style.gridTemplateColumns = "auto 19.230769em";
     aside.style.right = '0px';
+
+    document.dispatchEvent(new Event('closeAnswers'));
 });
 
 closeMenuButton.addEventListener("click", function (e){
-    body.style.gridTemplateColumns = "auto 100px";
-    aside.style.right = '-400px';
+    body.style.gridTemplateColumns = "auto 3.846154em";
+    aside.style.right = '-15.384615em';
     triggerSearch();
 });
 
+async function focusInput(element){
+    document.getElementById(element).focus();
+}
 
 // Prepare variables used to construct url
+const defaultAirDate = [new Date("January 1, 1950"), new Date()];
 var Clue,
     Answer,
     Value,
-    AirDate = [ new Date("January 1, 1950"), new Date() ],
+    AirDate = Array.from(defaultAirDate),   // Clone array NOT copy by reference
     Category;
 var categories;
 
@@ -222,8 +229,8 @@ startDateInput = document.getElementById('start-air-date');
 endDateInput = document.getElementById('end-air-date');
 
 // Set default dates
-startDateInput.value = new Date('January 1, 1950').toISOString().slice(0,10);
-endDateInput.value = new Date().toISOString().slice(0,10);
+startDateInput.value = defaultAirDate[0].toISOString().slice(0,10);
+endDateInput.value = defaultAirDate[1].toISOString().slice(0,10);
 
 startDateInput.addEventListener('input', function(e){
     // Make sure startDate is always less than or equal to endDate
@@ -253,7 +260,7 @@ startDateInput.addEventListener('keydown', function(e) {
     // If backspace or delete pressed
     if(e.keyCode == 8 || e.keyCode == 46){
         startDateInput.value = '';
-        AirDate[0] = new Date('January 1, 1950');
+        AirDate[0] = defaultAirDate[0];
     }
 });
 
@@ -261,7 +268,7 @@ endDateInput.addEventListener('keydown', function(e) {
     // If backspace or delete pressed
     if(e.keyCode == 8 || e.keyCode == 46){
         endDateInput.value = '';
-        AirDate[1] = new Date();
+        AirDate[1] = defaultAirDate[1];
     }
 });
 
@@ -309,15 +316,24 @@ function triggerSearch(){
 
 // Show loading spinner
 function loadingSpinner(state){
-    // if(state){
-        // document.getElementById("loadingIcon").style.visibility = "visible";
-        // document.getElementById("loadingIcon").style.height = "100%";
-        // document.getElementsByTagName("body")[0].style.height = "0px";
-    // }else{
-        // document.getElementById("loadingIcon").style.visibility = "hidden";
-        // document.getElementById("loadingIcon").style.height = "0%";
-        // document.getElementsByTagName("body")[0].style.height = "100%";
-    // }
+    loadingIcon = document.getElementById("loading-icon");
+    loadingIconContainer = document.getElementById("loading-icon-container");
+    searchResults = document.getElementById("search-results");
+
+    if(state){
+        loadingIconContainer.style.visibility = "visible";
+        loadingIconContainer.style.height = "100%";
+        loadingIconContainer.style.width = "100%";
+        loadingIcon.style.height = "80%";
+        loadingIcon.style.width = loadingIcon.offsetHeight + "px";
+        loadingIcon.style.height = loadingIcon.offsetHeight + "px";
+        searchResults.style.height = "0";
+    }else{
+        loadingIconContainer.style.visibility = "hidden";
+        loadingIconContainer.style.height = "0";
+        loadingIconContainer.style.width = "0";
+        searchResults.style.height = "100%";
+    }
 }
 
 
@@ -326,7 +342,8 @@ function loadingSpinner(state){
 // ===================================
 
 function getURL(){
-    // https://cors-anywhere.herokuapp.com/
+    // defaultURL = 'https://cors-anywhere.herokuapp.com/http://jservice.io/api/random/?count=10';
+    // URL = ['https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues/?'];
     defaultURL = 'http://jservice.io/api/random/?count=10';
     URL = ['http://jservice.io/api/clues/?'];
 
@@ -357,11 +374,11 @@ function getURL(){
         URL.push("value=".concat(Value));
     }
 
-    if(defined(AirDate) && typeof AirDate[0].getMonth === 'function' && AirDate[0] <= new Date()){
+    if(defined(AirDate) && AirDate[0] != defaultAirDate[0] && AirDate[0] <= new Date()){
         day = AirDate[0].toISOString().slice(0,10);
         URL.push("min_date=".concat(day));
     }
-    if(defined(AirDate) && typeof AirDate[1].getMonth === 'function'){
+    if(defined(AirDate) && AirDate[1] != defaultAirDate[1]){
         day = AirDate[1].toISOString().slice(0,10);
         URL.push("max_date=".concat(day));
     }
@@ -447,7 +464,7 @@ function updateContent(){
                         article = document.getElementsByTagName('article')[0];
 
                         answerScreenD = document.createElement('div');
-                        answerScreenD.id = 'answer-screen';
+                        answerScreenD.id = 'answer-screen'; 
 
                         answersDivs = [
                             document.createElement('div'),  // Exit button
@@ -484,13 +501,22 @@ function updateContent(){
 
 
                         // Adjust font size
-                        $(answersDivs[1]).textfill({"maxFontPixels":200, "minFontPixels":Number($(answersDivs[2].children[0]).css("font-size").slice(0,-2))});
-                        $(answersDivs[2]).textfill({"maxFontPixels":200, "minFontPixels":15, "widthOnly":true});
-                        $(answersDivs[3]).textfill({"maxFontPixels":200, "minFontPixels":Number($(answersDivs[2].children[0]).css("font-size").slice(0,-2)), "widthOnly":true});
+                        $(answersDivs[1]).textfill({"maxFontPixels":200, "minFontPixels":15});
+                        firstsFont = Number($(answersDivs[1].children[0]).css('font-size').slice(0,-2));
+                        $(answersDivs[2]).textfill({"maxFontPixels":firstsFont, "minFontPixels":15, "widthOnly":true});
+                        secondsFont = Number($(answersDivs[2].children[0]).css('font-size').slice(0,-2));
+                        $(answersDivs[3]).textfill({"maxFontPixels":secondsFont, "minFontPixels":15, "widthOnly":true});
 
-                        article.style.height = "0px";
-                        // setTimeout(new ResizeObserver(function(e){ answersDivs[0].click(); }).observe(answerScreenD), 100);
+                        article.style.height = "0";
 
+                        function closeAnswers(){
+                            setTimeout(answersDivs[0].click(), 3000);
+                        }
+                        if (document.addEventListener) {
+                            document.addEventListener('closeAnswers', closeAnswers, false);
+                        } else {
+                            document.attachEvent('closeAnswers', closeAnswers);
+                        }
                     });
 
                     searchResultsD.appendChild(entryD);
@@ -505,4 +531,11 @@ function updateContent(){
         });
 
     }, 1);
+}
+
+function delay(ms){
+    endTime = new Date().getTime() + ms;
+    while(new Date().getTime() < endTime){
+        ;
+    }
 }
