@@ -27,9 +27,20 @@ closeMenuButton.addEventListener("click", function (e){
     setTimeout(delay(10), 1);
 });
 
-async function focusInput(element){
-    document.getElementById(element).focus();
+function focusInput(event){
+    ids = event.path.map(x=>x.id).join(", ");
+    if(/category-icon/.test(ids)){
+        document.getElementById("category-input").focus()
+    }else if(/airdate-icon/.test(ids)){
+        document.getElementById("start-air-date").focus()
+    }else if(/value-icon/.test(ids)){
+        document.getElementById("value-input").focus()
+    }
 }
+
+document.getElementById("category-icon").addEventListener('click', focusInput);
+document.getElementById("airdate-icon").addEventListener('click', focusInput);
+document.getElementById("value-icon").addEventListener('click', focusInput);
 
 // Prepare variables used to construct url
 const defaultAirDate = [new Date("January 1, 1950"), new Date()];
